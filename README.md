@@ -1,3 +1,5 @@
+> *Note: I paused working on new projects for a while because I was focused on learning Java from the ground up. This project marks my return to hands-on development, applying what I learned along the way.*
+
 # Simple Bank System
 
 A simple banking system built with pure Java (no frameworks) to practice and demonstrate core Object-Oriented Programming concepts: **Encapsulation**, **Inheritance**, and **Polymorphism**.
