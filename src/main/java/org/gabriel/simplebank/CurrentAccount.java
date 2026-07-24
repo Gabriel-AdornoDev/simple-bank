@@ -12,15 +12,14 @@ public class CurrentAccount extends BankAccount {
     @Override
     public String withdraw(double amount) {
         if (amount <= 0) {
-            return String.format("%.2f is an invalid amount.", amount);
+            throw new InvalidAmountException("Amount must be greater than 0.");
         }
         else if (amount > (getBalance() + overdraftLimit)) {
-            return String.format("%.2f is more than your balance and limit.", amount);
+            throw new InsufficientFundsException("Insufficient balance for this amount.");
         }
-        else {
-            double previousBalance = getBalance();
+        else{
             debit(amount);
-            return String.format("Previous balance: %.2f\nCurrent balance: %.2f", previousBalance, getBalance());
+            return String.format("%.2f withdrawn successfully.\nCurrent balance: %.2f", amount, getBalance());
         }
     }
 }

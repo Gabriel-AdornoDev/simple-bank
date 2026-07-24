@@ -10,7 +10,7 @@ public class SavingsAccount extends BankAccount{
     }
     public String applyInterest() {
         double previousBalance = getBalance();
-        setBalance((getBalance() * interestRate));
+        setBalance(getBalance() + (getBalance() * interestRate));
         return String.format("Previous balance: %.2f\nCurrent balance: %.2f", previousBalance, getBalance());
     }
 }

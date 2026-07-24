@@ -1,3 +1,5 @@
+> *Note: I paused working on new projects for a while because I was focused on learning Java from the ground up. This project marks my return to hands-on development, applying what I learned along the way.*
+
 # Simple Bank System
 
 A simple banking system built with pure Java (no frameworks) to practice and demonstrate core Object-Oriented Programming concepts: **Encapsulation**, **Inheritance**, and **Polymorphism**.
@@ -15,6 +17,10 @@ This project simulates a basic banking system with two types of bank accounts, e
 - Two distinct account types with different withdrawal behavior:
   - **Current Account** — supports an overdraft limit
   - **Savings Account** — does not allow a negative balance, and can accrue interest
+- Transfer funds between any two accounts, regardless of their concrete type
+- Descriptive error handling via custom exceptions (`InsufficientFundsException`, `InvalidAmountException`) instead of generic error codes
+
+See [CHANGELOG.md](./CHANGELOG.md) for a detailed history of changes.
 
 ## Class Structure
 
@@ -33,7 +39,8 @@ The base class representing a generic bank account.
 | Method | Description |
 |---|---|
 | `deposit(double amount)` | Adds funds to the balance. Rejects non-positive amounts. |
-| `withdraw(double amount)` | Subtracts funds from the balance, only if sufficient funds are available. |
+| `withdraw(double amount)` | Subtracts funds from the balance. Returns a success message, or throws `InsufficientFundsException`/`InvalidAmountException` on failure. |
+| `transfer(BankAccount destination, double amount)` | Moves funds from this account to another, reusing `withdraw`/`deposit` internally. Returns a success or error message. |
 | `checkBalance()` | Returns a formatted string with the current balance. |
 | `getBalance()` | Returns the raw balance value (for calculations). |
 | `getAccountHolder()` | Returns the account holder's name. |

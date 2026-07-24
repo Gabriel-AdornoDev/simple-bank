@@ -1,10 +1,17 @@
 package org.gabriel.simplebank;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 //A Bank Account super class
 public class BankAccount {
     private String accountHolder;
     private int accountNumber;
     private double balance = 0;
+
+
+
 
     //Constructor method
     public BankAccount(String accountHolder, int accountNumber) {
@@ -34,18 +41,37 @@ public class BankAccount {
         }
     }
 
+    //Debit method
+    protected void debit(double amount) {
+        balance -= amount;
+    }
+
     //Withdraw method
     public String withdraw(double amount) {
         if (amount <= 0) {
-        return String.format("%.2f is an invalid amount.", amount);
+            throw new InvalidAmountException("Amount must be greater than 0.");
         }
         else if (amount > balance) {
-            return String.format("%.2f is more than your balance.", amount);
+            throw new InsufficientFundsException("Insufficient balance for this amount.");
         }
         else {
-            double previousBalance = balance;
-            balance -= amount;
-            return String.format("Previous balance: %.2f\nCurrent balance: %.2f", previousBalance, balance);
+            debit(amount);
+            return String.format("%.2f withdrawn successfully.\nCurrent balance: %.2f", amount, getBalance());
+        }
+    }
+
+    //Transfer money method
+    public String transfer(BankAccount conta, double amount) {
+        try {
+            this.withdraw(amount);
+            conta.setBalance(conta.getBalance() + amount);
+            return "Success";
+        }
+        catch (InsufficientFundsException e) {
+            return "Error: "+ e.getMessage();
+        }
+        catch (InvalidAmountException e) {
+            return "Error: "+ e.getMessage();
         }
     }
 
@@ -53,12 +79,9 @@ public class BankAccount {
     public String checkBalance() {
         return String.format("Balance: %.2f", balance);
     }
-    //Debit method
-    protected void debit(double amount) {
-        balance -= amount;
-    }
+
     //Protected setBalance for security
     protected void setBalance(double amount) {
-        balance += amount;
+        balance = amount;
     }
 }
