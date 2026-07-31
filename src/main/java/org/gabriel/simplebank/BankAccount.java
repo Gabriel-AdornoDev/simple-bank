@@ -1,22 +1,20 @@
 package org.gabriel.simplebank;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 //A Bank Account super class
-public class BankAccount {
+public abstract class BankAccount {
     private String accountHolder;
-    private int accountNumber;
+    private final int accountNumber;
     private double balance = 0;
-
-
-
+    private static long totalAccounts;
 
     //Constructor method
     public BankAccount(String accountHolder, int accountNumber) {
+        if (accountHolder == null || accountHolder.isBlank()) {
+            throw new InvalidAccountHolderException("Invalid holder name");
+        }
         this.accountHolder = accountHolder;
         this.accountNumber = accountNumber;
+        totalAccounts++;
     }
 
     //Gets for accountHolder, accountNumber and balance
@@ -47,30 +45,16 @@ public class BankAccount {
     }
 
     //Withdraw method
-    public String withdraw(double amount) {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must be greater than 0.");
-        }
-        else if (amount > balance) {
-            throw new InsufficientFundsException("Insufficient balance for this amount.");
-        }
-        else {
-            debit(amount);
-            return String.format("%.2f withdrawn successfully.\nCurrent balance: %.2f", amount, getBalance());
-        }
-    }
+    public abstract String withdraw(double amount);
 
     //Transfer money method
-    public String transfer(BankAccount conta, double amount) {
+    public String transfer(BankAccount account, double amount) {
         try {
             this.withdraw(amount);
-            conta.setBalance(conta.getBalance() + amount);
+            account.setBalance(account.getBalance() + amount);
             return "Success";
         }
-        catch (InsufficientFundsException e) {
-            return "Error: "+ e.getMessage();
-        }
-        catch (InvalidAmountException e) {
+        catch (InsufficientFundsException  | InvalidAmountException e) {
             return "Error: "+ e.getMessage();
         }
     }
@@ -83,5 +67,19 @@ public class BankAccount {
     //Protected setBalance for security
     protected void setBalance(double amount) {
         balance = amount;
+    }
+
+    //Get total accounts method
+    public static String getTotalAccounts() {
+        return String.format("Total accounts: %d", totalAccounts);
+    }
+
+    //Update an account holder method
+    public String updateAccountHolder(String newHolder) {
+        if (newHolder == null || newHolder.isBlank()) {
+            throw new InvalidAccountHolderException("Invalid holder name.");
+        }
+        this.accountHolder = newHolder;
+        return String.format("Now the new holder is %s.", newHolder);
     }
 }

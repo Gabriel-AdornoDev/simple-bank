@@ -46,5 +46,6 @@ public class Main {
         for (BankAccount account : accounts) {
             System.out.println(account.getAccountHolder() + " (#" + account.getAccountNumber() + "): " + account.checkBalance());
         }
+        BankAccount.getTotalAccounts();
     }
 }
